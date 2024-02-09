@@ -6,6 +6,8 @@ There are two main features:
 - **Time Offset**: Shift the time codes of selected subtitles by a number of milliseconds.
 - **Renumber**: Renumber the selected subtitles starting at a given index.
 
+If there's no selection, the plugin will affect the whole file.
+
 The plugin can also optionally cleanup the SRT file by removing extra characters not part of the SRT standard.
 
 All the features are easily accessible from the tool's control dialog:
