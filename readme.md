@@ -12,4 +12,4 @@ All the features are easily accessible from the tool's control dialog.
 
 This plugin is under GPL.
 
-Don Ho <don.h@free.fr>
+Louis de Carufel (ldecarufel at hotmail.com)
