@@ -115,6 +115,7 @@ void SrtToolPanel::applyOperations()
 	// Get parameter values
 	char controlText[256];
 	controlText[255] = 0;
+	::SendDlgItemMessageA(_hSelf, ID_OFFSET_EDIT, WM_GETTEXT, 255, (LPARAM)controlText);
 	long timeOffset = atol(controlText);
 
 	::SendDlgItemMessageA(_hSelf, ID_INDEX_EDIT, WM_GETTEXT, 255, (LPARAM)controlText);
