@@ -8,7 +8,9 @@ There are two main features:
 
 The plugin can also optionally cleanup the SRT file by removing extra characters not part of the SRT standard.
 
-All the features are easily accessible from the tool's control dialog.
+All the features are easily accessible from the tool's control dialog:
+
+![Panel screenshot](screenshot.png "Screenshot of the SrtTools panel")
 
 This plugin is under GPL.
 
