@@ -45,11 +45,16 @@ INT_PTR CALLBACK SrtToolPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM l
 			SetWindowSubclass(GetDlgItem(_hSelf, ID_OFFSET_EDIT), &offsetEditSubclassProc, 0, 0);
 			SetWindowSubclass(GetDlgItem(_hSelf, ID_INDEX_EDIT), &indexEditSubclassProc, 0, 0);
 
-			// Set bold font for titles
-			m_boldFont = CreateFont(0, 0, 0, 0, FW_BOLD, 0, 0, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, NULL);
-			::SendDlgItemMessageW(_hSelf, ID_OFFSET_TITLE, WM_SETFONT, 0, (LPARAM)m_boldFont);
-			::SendDlgItemMessageW(_hSelf, ID_INDEX_TITLE, WM_SETFONT, 0, (LPARAM)m_boldFont);
-			::SendDlgItemMessageW(_hSelf, ID_CLEANUP_TITLE, WM_SETFONT, 0, (LPARAM)m_boldFont);
+			// Create bold font and apply to titles
+			HFONT titleFont = (HFONT)::SendDlgItemMessage(_hSelf, ID_OFFSET_TITLE, WM_GETFONT, 0, 0);
+			LOGFONT titleFontFormat;
+			GetObject(titleFont, sizeof(LOGFONT), &titleFontFormat);
+			titleFontFormat.lfWeight = FW_BOLD;
+			m_boldFont = CreateFontIndirect(&titleFontFormat);
+
+			::SendDlgItemMessage(_hSelf, ID_OFFSET_TITLE, WM_SETFONT, (WPARAM)m_boldFont, 0);
+			::SendDlgItemMessage(_hSelf, ID_INDEX_TITLE, WM_SETFONT, (WPARAM)m_boldFont, 0);
+			::SendDlgItemMessage(_hSelf, ID_CLEANUP_TITLE, WM_SETFONT, (WPARAM)m_boldFont, 0);
 
 			updateDialogState();
 
