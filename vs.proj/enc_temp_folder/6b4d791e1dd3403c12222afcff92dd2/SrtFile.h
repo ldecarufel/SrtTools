@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------------
-// SrtFile.h (v1.1)
+// SrtFile.h (v1.0)
 // Simple SRT file library, by Louis de Carufel.
 //
 // Can be used to parse an SRT file, renumber the subtitles,

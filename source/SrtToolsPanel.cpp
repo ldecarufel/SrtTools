@@ -172,10 +172,9 @@ void SrtToolPanel::applyOperations()
 	}
 	else
 	{
-		std::string text = outputStream.str();
-		size_t caret = ::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
+		size_t length = outputStream.str().length();
 		::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)outputStream.str().c_str());
-		::SendMessage(hCurrScintilla, SCI_SETSEL, (WPARAM)start, (LPARAM)caret);
+		::SendMessage(hCurrScintilla, SCI_SETSEL, (WPARAM)start, (LPARAM)(start + length));
 	}
 }
 
