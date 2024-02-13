@@ -35,8 +35,9 @@ namespace SrtFileInternal
     bool ReadLine(std::istream& stream, std::string& str)
     {
         char buffer[1024];
-        if (stream.getline(buffer, sizeof(buffer)))
+        if (stream.good())
         {
+            stream.getline(buffer, sizeof(buffer));
             str = buffer;
             str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
             return true;
@@ -220,11 +221,16 @@ public:
             }
             
             // Read subtitle text lines
+            std::istream::pos_type lineStart = stream.tellg();
             while (SrtFileInternal::ReadLine(stream, curLine))
             {
                 if (SrtFileInternal::IsBlankLine(curLine))
+                {
+                    stream.seekg(lineStart); // Blank line is not part of subtitle
                     break;
+                }
                 m_textLines.push_back(curLine);
+                lineStart = stream.tellg();
             }
 
             break;
@@ -296,7 +302,7 @@ public:
     }
 
     // Reads an SRT file from the given stream.
-    // Can be a std::fstream or a std::stringstream. 
+    // Can use a std::fstream or a std::stringstream. 
     bool ReadFromFile(std::istream& stream)
     {
         if (!stream.good())
@@ -316,7 +322,7 @@ public:
     }
 
     // Writes SRT file contents to the given stream.
-    // Can be a std::fstream or a std::stringstream. 
+    // Can use a std::fstream or a std::stringstream. 
     void WriteToFile(std::ostream& stream, bool ignoreExtra = false) const
     {
         if (!IsValid() || !stream.good())
@@ -326,14 +332,12 @@ public:
         {
 			const SrtSubtitle& subtitle = m_subtitles[subIndex];
             subtitle.WriteToFile(stream, ignoreExtra);
-
-			if (subIndex < m_subtitles.size() - 1)
-				SrtFileInternal::WriteLine(stream, "\n");
+            if (ignoreExtra)
+			    SrtFileInternal::WriteLine(stream, "\n");
         }
 
         if (!ignoreExtra && !m_extra.empty())
         {
-            SrtFileInternal::WriteLine(stream, "\n");
             SrtFileInternal::WriteLine(stream, m_extra.c_str());
         }
     }

@@ -19,3 +19,6 @@ vs.proj/NppPluginConverter.lib
 *.aps
 *.bak
 vs.proj/NppConverter.lib
+vs.proj/SrtTools.lib
+
+vs.proj/SrtTools.vcxproj.user
