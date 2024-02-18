@@ -328,9 +328,8 @@ public:
         if (!IsValid() || !stream.good())
             return;
 
-		for (int subIndex = 0; subIndex < m_subtitles.size(); ++subIndex)
+		for (const SrtSubtitle& subtitle :  m_subtitles)
         {
-			const SrtSubtitle& subtitle = m_subtitles[subIndex];
             subtitle.WriteToFile(stream, ignoreExtra);
             if (ignoreExtra)
 			    SrtFileInternal::WriteLine(stream, "\n");

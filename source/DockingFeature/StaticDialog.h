@@ -13,52 +13,61 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
 #pragma once
-
-#include "Window.h"
 #include "..\Notepad_plus_msgs.h"
+#include "Window.h"
+
+typedef HRESULT (WINAPI * ETDTProc) (HWND, DWORD);
 
 enum class PosAlign { left, right, top, bottom };
 
-struct DLGTEMPLATEEX {
+struct DLGTEMPLATEEX
+{
       WORD   dlgVer;
       WORD   signature;
       DWORD  helpID;
       DWORD  exStyle;
-      DWORD  style; 
+      DWORD  style;
       WORD   cDlgItems;
       short  x;
-      short  y;    
+      short  y;
       short  cx;
       short  cy;
       // The structure has more fields but are variable length
-} ;
+};
 
 class StaticDialog : public Window
 {
 public :
-	StaticDialog() : Window() {};
-	~StaticDialog(){
-		if (isCreated()) {
-			::SetWindowLongPtr(_hSelf, GWLP_USERDATA, (long)NULL);	//Prevent run_dlgProc from doing anything, since its virtual
-			destroy();
-		}
-	};
-	virtual void create(int dialogID, bool isRTL = false);
+	virtual ~StaticDialog();
+
+	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true);
 
     virtual bool isCreated() const {
 		return (_hSelf != NULL);
-	};
+	}
 
 	void goToCenter();
-    void destroy() {
-		::SendMessage(_hParent, NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, (WPARAM)_hSelf);
-		::DestroyWindow(_hSelf);
-	};
 
-protected :
+	void display(bool toShow = true, bool enhancedPositioningCheckWhenShowing = false) const;
+
+	RECT getViewablePositionRect(RECT testRc) const;
+
+	POINT getTopPoint(HWND hwnd, bool isLeft = true) const;
+
+	bool isCheckedOrNot(int checkControlID) const
+	{
+		return (BST_CHECKED == ::SendMessage(::GetDlgItem(_hSelf, checkControlID), BM_GETCHECK, 0, 0));
+	}
+
+	void setChecked(int checkControlID, bool checkOrNot = true) const
+	{
+		::SendDlgItemMessage(_hSelf, checkControlID, BM_SETCHECK, checkOrNot ? BST_CHECKED : BST_UNCHECKED, 0);
+	}
+
+    virtual void destroy() override;
+
+protected:
 	RECT _rc;
 	static INT_PTR CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam) = 0;
@@ -66,4 +75,3 @@ protected :
     void alignWith(HWND handle, HWND handle2Align, PosAlign pos, POINT & point);
 	HGLOBAL makeRTLResource(int dialogID, DLGTEMPLATE **ppMyDlgTemplate);
 };
-

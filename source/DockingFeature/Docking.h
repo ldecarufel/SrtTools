@@ -15,8 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#ifndef DOCKING_H
-#define DOCKING_H
+#pragma once
+
+#include <windows.h>
 
 // ATTENTION : It's a part of interface header, so don't include the others header here
 
@@ -47,13 +48,13 @@
 
 typedef struct {
 	HWND		hClient;		// client Window Handle
-	TCHAR		*pszName;		// name of plugin (shown in window)
+	const TCHAR	*pszName;		// name of plugin (shown in window)
 	int			dlgID;			// a funcItem provides the function pointer to start a dialog. Please parse here these ID
 
 	// user modifications
 	UINT		uMask;			// mask params: look to above defines
 	HICON		hIconTab;		// icon for tabs
-	TCHAR		*pszAddInfo;		// for plugin to display additional informations
+	const TCHAR *pszAddInfo;		// for plugin to display additional informations
 
 	// internal data, do not use !!!
 	RECT		rcFloat;		// floating position
@@ -71,5 +72,3 @@ typedef struct {
 #define	HIT_TEST_THICKNESS		20
 #define SPLITTER_WIDTH			4
 
-
-#endif // DOCKING_H
